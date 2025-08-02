@@ -32,17 +32,10 @@ const DotBackground: React.FC = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
     let width = window.innerWidth;
     let height = window.innerHeight;
     canvas.width = width;
     canvas.height = height;
-
-    // Create gradient background
-    const gradient = ctx.createLinearGradient(0, 0, width, height);
-    BG_GRADIENT.forEach(({ stop, color }) => gradient.addColorStop(stop, color));
 
     // Initialize dots
     dots.current = Array.from({ length: DOTS }, () => ({
@@ -55,7 +48,10 @@ const DotBackground: React.FC = () => {
     // Animation loop
     let animationId: number;
     function animate() {
+      const ctx = canvas.getContext('2d');
       if (!ctx) return;
+      const gradient = ctx.createLinearGradient(0, 0, width, height);
+      BG_GRADIENT.forEach(({ stop, color }) => gradient.addColorStop(stop, color));
       ctx.clearRect(0, 0, width, height);
       // Draw glossy gradient background
       ctx.save();
