@@ -135,11 +135,10 @@ const DotBackground: React.FC = () => {
     function onResize() {
       width = window.innerWidth;
       height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-      gradient.addColorStop(0, BG_GRADIENT[0].color);
-      gradient.addColorStop(0.5, BG_GRADIENT[1].color);
-      gradient.addColorStop(1, BG_GRADIENT[2].color);
+      if (canvasRef.current) {
+        canvasRef.current.width = width;
+        canvasRef.current.height = height;
+      }
     }
     window.addEventListener('resize', onResize);
 
