@@ -8,8 +8,13 @@ import styles from "./Navbar.module.css";
 const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const navbarRef = useRef<HTMLElement>(null);
   const { user } = useAuth();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -55,16 +60,18 @@ const Navbar: React.FC = () => {
   const getAccountLink = () => {
     if (user) {
       if (user.userType === "admin") {
+        console.log("Admin user detected, showing Admin Account link");
         return (
           <Link
             href="/admin-dashboard"
             className={styles.link}
             onClick={closeMobileMenu}
           >
-            My Account
+            Admin Account
           </Link>
         );
       } else if (user.userType === "citizen") {
+        console.log("Citizen user detected, showing My Account link");
         return (
           <Link
             href="/dashboard"
@@ -76,12 +83,18 @@ const Navbar: React.FC = () => {
         );
       }
     }
+    console.log("No user detected, returning null");
     return null;
   };
 
   const getAuthLinks = () => {
-    // Show login links immediately, don't wait for loading
-    if (!user) {
+    if (user) {
+      // User is logged in - don't show logout button in navbar
+      console.log("User is logged in, not showing auth links");
+      return null;
+    } else {
+      // User not logged in - show login links
+      console.log("User not logged in, showing login links");
       return (
         <>
           <Link
@@ -101,11 +114,14 @@ const Navbar: React.FC = () => {
         </>
       );
     }
-    return null;
   };
   return (
-    <nav className={styles.navbar} ref={navbarRef}>
-      <div className={styles.left}>
+    <nav
+      className={styles.navbar}
+      ref={navbarRef}
+      suppressHydrationWarning={true}
+    >
+      <div className={styles.left} suppressHydrationWarning={true}>
         <Link href="/" className={styles.brand} onClick={closeMobileMenu}>
           <Image
             src="/Logo.png"
@@ -123,7 +139,7 @@ const Navbar: React.FC = () => {
           className={styles.mobileMenuButton}
           onClick={toggleMobileMenu}
           aria-label="Toggle mobile menu"
-          aria-expanded={isMobileMenuOpen ? "true" : "false"}
+          aria-expanded={isMobileMenuOpen}
         >
           <span
             className={`${styles.hamburger} ${
@@ -141,9 +157,11 @@ const Navbar: React.FC = () => {
         className={`${styles.right} ${
           isMobileMenuOpen ? styles.mobileMenuOpen : ""
         }`}
+        key={`navbar-${user?.userType || "guest"}`}
+        suppressHydrationWarning={true}
       >
-        {getAccountLink()}
-        {getAuthLinks()}
+        {mounted && getAccountLink()}
+        {mounted && getAuthLinks()}
         <Link href="/team" className={styles.link} onClick={closeMobileMenu}>
           Meet the Team
         </Link>

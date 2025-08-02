@@ -30,7 +30,7 @@ export default function MyIssues() {
 
     const fetchMyIssues = async () => {
       try {
-        const response = await fetch(`/api/tickets?userId=${user?._id}`, {
+        const response = await fetch(`/api/tickets?userEmail=${user?.email}`, {
           credentials: "include",
         });
 
@@ -148,7 +148,9 @@ export default function MyIssues() {
                       <div className={styles.detail}>
                         <span className={styles.detailLabel}>Location:</span>
                         <span className={styles.detailValue}>
-                          {issue.location}
+                          {typeof issue.location === "object"
+                            ? JSON.stringify(issue.location)
+                            : issue.location}
                         </span>
                       </div>
                     )}

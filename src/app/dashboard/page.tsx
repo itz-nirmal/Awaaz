@@ -34,7 +34,7 @@ export default function Dashboard() {
   // Define fetchUserStats before using it in useEffect
   const fetchUserStats = useCallback(async () => {
     try {
-      const response = await fetch(`/api/tickets?userId=${user?._id}`, {
+      const response = await fetch(`/api/tickets?userEmail=${user?.email}`, {
         credentials: "include",
       });
 
@@ -60,7 +60,7 @@ export default function Dashboard() {
     } catch {
       console.error("Error fetching stats");
     }
-  }, [user?._id, animateCount]);
+  }, [user?.email, animateCount]);
 
   useEffect(() => {
     if (!loading && !user) {

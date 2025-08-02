@@ -3,10 +3,7 @@ import jwt from "jsonwebtoken";
 
 export function middleware(request: NextRequest) {
   // Check if the request is for protected API routes
-  if (
-    request.nextUrl.pathname.startsWith("/api/tickets") ||
-    request.nextUrl.pathname.startsWith("/api/profile")
-  ) {
+  if (request.nextUrl.pathname.startsWith("/api/profile")) {
     const token = request.cookies.get("token")?.value;
 
     if (!token) {
@@ -32,5 +29,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/tickets/:path*", "/api/profile/:path*"],
+  matcher: ["/api/profile/:path*"],
 };

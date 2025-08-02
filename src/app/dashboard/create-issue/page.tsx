@@ -51,6 +51,7 @@ export default function CreateIssue() {
         },
         images: images,
         priority: "medium",
+        userEmail: user?.email, // Simple - just use user's email
       };
 
       const response = await fetch("/api/tickets", {

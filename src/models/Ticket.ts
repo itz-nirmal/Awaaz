@@ -13,6 +13,7 @@ export interface ITicket extends Document {
     | "other";
   priority: "low" | "medium" | "high" | "urgent";
   status: "open" | "in-progress" | "resolved" | "closed";
+  resolution?: string; // Admin resolution message
   location: {
     address: string;
     coordinates?: {
@@ -21,6 +22,7 @@ export interface ITicket extends Document {
     };
   };
   citizenId?: mongoose.Types.ObjectId; // Made optional
+  userEmail?: string; // Simple email field instead of complex user relations
   assignedTo?: mongoose.Types.ObjectId;
   images?: string[];
   upvotes: number;
@@ -70,6 +72,12 @@ const TicketSchema = new Schema<ITicket>(
       enum: ["open", "in-progress", "resolved", "closed"],
       default: "open",
     },
+    resolution: {
+      type: String,
+      required: false,
+      trim: true,
+      maxlength: [1000, "Resolution cannot exceed 1000 characters"],
+    },
     location: {
       address: {
         type: String,
@@ -85,6 +93,10 @@ const TicketSchema = new Schema<ITicket>(
       type: Schema.Types.ObjectId,
       ref: "User",
       required: false, // Made optional for simplified submissions
+    },
+    userEmail: {
+      type: String,
+      required: false, // Simple email field
     },
     assignedTo: {
       type: Schema.Types.ObjectId,

@@ -49,7 +49,7 @@ async function connectDB() {
   if (!cached.promise) {
     // Get MongoDB URI at runtime
     const mongoUri = getMongoURI();
-    
+
     const opts = {
       bufferCommands: false,
       serverSelectionTimeoutMS: 10000, // 10 second timeout

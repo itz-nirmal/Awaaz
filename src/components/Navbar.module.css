@@ -112,11 +112,27 @@
 }
 
 .logoutButton {
-  background: none;
+  background: linear-gradient(90deg, #e74c3c 0%, #c0392b 100%);
   border: none;
+  color: white;
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  border-radius: 1rem;
   cursor: pointer;
   font-family: inherit;
-  font-size: inherit;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.logoutButton:hover {
+  background: linear-gradient(90deg, #c0392b 0%, #a93226 100%);
+  transform: scale(1.06);
+  box-shadow: 0 4px 16px 0 rgba(231, 76, 60, 0.3);
 }
 
 .link:hover,
@@ -131,15 +147,6 @@
     0 1.5px 8px 0 rgba(26, 35, 126, 0.1);
   transform: scale(1.06);
   text-shadow: 0 2px 8px rgba(45, 26, 77, 0.18);
-}
-
-.logoutButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: inherit;
 }
 
 /* Tablet styles */

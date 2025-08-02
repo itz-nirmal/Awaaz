@@ -13,10 +13,7 @@ interface Issue {
   location: string;
   createdAt: string;
   updatedAt: string;
-  userId: {
-    name: string;
-    email: string;
-  };
+  userEmail: string; // Simplified - just store the email directly
 }
 
 export default function CommunityIssues() {
@@ -199,7 +196,9 @@ export default function CommunityIssues() {
                         <div className={styles.detail}>
                           <span className={styles.detailLabel}>Location:</span>
                           <span className={styles.detailValue}>
-                            {issue.location}
+                            {typeof issue.location === "object"
+                              ? JSON.stringify(issue.location)
+                              : issue.location}
                           </span>
                         </div>
                       )}
@@ -207,7 +206,7 @@ export default function CommunityIssues() {
                       <div className={styles.detail}>
                         <span className={styles.detailLabel}>Reported by:</span>
                         <span className={styles.detailValue}>
-                          {issue.userId?.name || "Anonymous"}
+                          {issue.userEmail || "Anonymous"}
                         </span>
                       </div>
 

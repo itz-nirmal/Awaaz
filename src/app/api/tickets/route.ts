@@ -1,124 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import connectDB from "@/lib/mongodb";
 import { Ticket } from "@/models/Ticket";
 
-interface DecodedToken {
-  userId: string;
-  email: string;
-  userType: "admin" | "citizen";
-}
-
-// Helper function to verify JWT token (used for GET requests)
-function verifyToken(request: NextRequest): DecodedToken | null {
-  const token = request.cookies.get("token")?.value;
-
-  if (!token) {
-    return null;
-  }
-
-  try {
-    const secret =
-      process.env.JWT_SECRET ||
-      process.env.NEXTAUTH_SECRET ||
-      "awaaz-secret-key";
-
-    const decoded = jwt.verify(token, secret) as DecodedToken;
-    return decoded;
-  } catch {
-    return null;
-  }
-}
-
-// GET - Fetch all tickets or user's tickets
-export async function GET(request: NextRequest) {
-  try {
-    await connectDB();
-
-    const user = verifyToken(request);
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "10");
-    const status = searchParams.get("status");
-    const category = searchParams.get("category");
-    const userId = searchParams.get("userId");
-
-    // Build filter query
-    const filter: Record<string, unknown> = {};
-
-    if (user.userType === "citizen" && !userId) {
-      filter.citizenId = user.userId;
-    } else if (userId) {
-      filter.citizenId = userId;
-    }
-
-    if (status) filter.status = status;
-    if (category) filter.category = category;
-
-    const skip = (page - 1) * limit;
-
-    const tickets = await Ticket.find(filter)
-      .populate("citizenId", "name email")
-      .populate("assignedTo", "name email")
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
-
-    const total = await Ticket.countDocuments(filter);
-
-    return NextResponse.json({
-      tickets,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit),
-      },
-    });
-  } catch (error) {
-    console.error("Get tickets error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
-  }
-}
-
-// POST - Create a new ticket (No JWT verification - simplified approach)
+// POST - Create a new ticket (Super Simple)
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
-
-    // No authentication required - anyone can submit issues
-    // This makes it much simpler and avoids JWT complications
     const requestBody = await request.json();
-
-    const { title, description, category, priority, location, images } =
+    const { title, description, category, location, images, userEmail } =
       requestBody;
 
-    // Validate required fields
-    if (!title || !description || !category || !location?.address) {
-      return NextResponse.json(
-        {
-          error:
-            "Missing required fields: title, description, category, and address are required",
-        },
-        { status: 400 }
-      );
-    }
-
-    // Create new ticket without user authentication
+    // Just create the ticket - no complex auth
     const newTicket = new Ticket({
       title,
       description,
       category,
-      priority: priority || "medium",
+      priority: "medium",
       location,
-      // citizenId is now optional - no user required
+      userEmail: userEmail, // Use email instead of complex user ID
       images: images || [],
     });
 
@@ -132,6 +31,60 @@ export async function POST(request: NextRequest) {
     console.error("Create ticket error:", error);
     return NextResponse.json(
       { error: "Failed to submit issue. Please try again." },
+      { status: 500 }
+    );
+  }
+}
+
+// GET - Simple fetch for both users and admins
+export async function GET(request: NextRequest) {
+  try {
+    await connectDB();
+    const { searchParams } = new URL(request.url);
+    const userEmail = searchParams.get("userEmail");
+    const isAdmin = searchParams.get("admin") === "true";
+
+    let filter = {};
+    if (!isAdmin && userEmail) {
+      filter = { userEmail: userEmail }; // Show only user's tickets
+    }
+    // If admin, show all tickets (no filter)
+
+    const tickets = await Ticket.find(filter).sort({ createdAt: -1 });
+
+    return NextResponse.json({ tickets });
+  } catch (error) {
+    console.error("Get tickets error:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT - Update ticket status (for admin)
+export async function PUT(request: NextRequest) {
+  try {
+    await connectDB();
+    const { ticketId, status, resolution } = await request.json();
+
+    const updateData: { status: string; resolution?: string } = { status };
+    if (resolution) {
+      updateData.resolution = resolution;
+    }
+
+    const updatedTicket = await Ticket.findByIdAndUpdate(ticketId, updateData, {
+      new: true,
+    });
+
+    return NextResponse.json({
+      message: "Ticket updated successfully!",
+      ticket: updatedTicket,
+    });
+  } catch (error) {
+    console.error("Update ticket error:", error);
+    return NextResponse.json(
+      { error: "Failed to update ticket" },
       { status: 500 }
     );
   }

@@ -3,64 +3,141 @@
   padding: 2rem 2rem 2rem;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   position: relative;
   z-index: 2;
 }
 
 .main {
-  max-width: 800px;
+  max-width: 1000px;
   width: 100%;
+}
+
+.header {
   text-align: center;
+  margin-bottom: 3rem;
 }
 
 .title {
   font-size: clamp(2rem, 6vw, 3rem);
   font-weight: 700;
   color: #fff;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   text-shadow: 0 4px 32px rgba(60, 0, 120, 0.18);
 }
 
-.description {
+.subtitle {
   font-size: clamp(1rem, 3vw, 1.2rem);
   color: #e0d7ff;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 2px 8px rgba(60, 0, 120, 0.1);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.section {
+  background: rgba(30, 10, 50, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 2.5rem;
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+}
+
+.sectionTitle {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 16px rgba(60, 0, 120, 0.15);
+}
+
+.description {
+  font-size: clamp(1rem, 3vw, 1.1rem);
+  color: #e0d7ff;
+  margin-bottom: 1.5rem;
   line-height: 1.6;
   text-shadow: 0 2px 8px rgba(60, 0, 120, 0.1);
 }
 
+.list {
+  color: #e0d7ff;
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.list li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
 .features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
 }
 
 .feature {
-  background: rgba(30, 10, 50, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
-  padding: 2rem;
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  backdrop-filter: blur(18px) saturate(160%);
-  transition: transform 0.3s ease;
+  background: rgba(50, 20, 80, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.8rem;
+  padding: 1.5rem;
+  transition: transform 0.3s ease, background 0.3s ease;
 }
 
 .feature:hover {
   transform: translateY(-5px);
+  background: rgba(50, 20, 80, 0.3);
 }
 
 .feature h3 {
-  color: #b39ddb;
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
+  color: #fff;
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
   font-weight: 600;
+  text-shadow: 0 2px 8px rgba(60, 0, 120, 0.15);
 }
 
 .feature p {
-  color: #e0d7ff;
+  color: #d0bfff;
   line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.hackathonBanner {
+  background: linear-gradient(
+    135deg,
+    rgba(138, 43, 226, 0.2),
+    rgba(75, 0, 130, 0.2)
+  );
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.hackathonBanner h3 {
+  font-size: 1.5rem;
+  color: #ffd700;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 16px rgba(255, 215, 0, 0.3);
+}
+
+.hackathonBanner p {
+  color: #e0d7ff;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.hackathonBanner strong {
+  color: #ffd700;
+  font-weight: 600;
 }
 
 @media screen and (max-width: 768px) {

@@ -1,0 +1,156 @@
+.container {
+  min-height: 100vh;
+  padding: 2rem 2rem 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.main {
+  max-width: 800px;
+  width: 100%;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 1rem;
+  text-shadow: 0 4px 32px rgba(60, 0, 120, 0.18);
+}
+
+.subtitle {
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  color: #e0d7ff;
+  margin-bottom: 2rem;
+  text-shadow: 0 2px 8px rgba(60, 0, 120, 0.1);
+}
+
+.developmentCard {
+  background: rgba(30, 10, 50, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem;
+  padding: 3rem;
+  text-align: center;
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.cardIcon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+}
+
+.cardTitle {
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 16px rgba(60, 0, 120, 0.15);
+}
+
+.cardDescription {
+  font-size: clamp(1rem, 3vw, 1.1rem);
+  color: #e0d7ff;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  text-shadow: 0 2px 8px rgba(60, 0, 120, 0.1);
+}
+
+.teamStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  padding: 2rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statNumber {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 2px 16px rgba(60, 0, 120, 0.3);
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: #d0bfff;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.comingSoon {
+  background: rgba(50, 20, 80, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-top: 1rem;
+}
+
+.comingSoon h3 {
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.comingSoon p {
+  color: #d0bfff;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+
+  .developmentCard {
+    padding: 2rem;
+  }
+
+  .teamStats {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .statNumber {
+    font-size: 2rem;
+  }
+
+  .comingSoon {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .developmentCard {
+    padding: 1.5rem;
+  }
+
+  .cardIcon {
+    font-size: 3rem;
+  }
+}
