@@ -28,27 +28,27 @@ export default function MyIssues() {
       return;
     }
 
+    const fetchMyIssues = async () => {
+      try {
+        const response = await fetch(`/api/tickets?userId=${user?._id}`, {
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setIssues(data.tickets || []);
+        } else {
+          setError("Failed to fetch your issues");
+        }
+      } catch {
+        setError("Network error. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchMyIssues();
   }, [user, router]);
-
-  const fetchMyIssues = async () => {
-    try {
-      const response = await fetch(`/api/tickets?userId=${user?._id}`, {
-        credentials: "include",
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setIssues(data.tickets || []);
-      } else {
-        setError("Failed to fetch your issues");
-      }
-    } catch (error) {
-      setError("Network error. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -110,7 +110,7 @@ export default function MyIssues() {
             <div className={styles.emptyState}>
               <h3>No Issues Reported Yet</h3>
               <p>
-                You haven't reported any issues yet. Start by creating your
+                You haven&apos;t reported any issues yet. Start by creating your
                 first issue!
               </p>
               <button

@@ -25,7 +25,7 @@ function verifyToken(request: NextRequest): DecodedToken | null {
 
     const decoded = jwt.verify(token, secret) as DecodedToken;
     return decoded;
-  } catch (error) {
+  } catch {
     return null;
   }
 }

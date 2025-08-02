@@ -50,7 +50,6 @@ async function connectDB() {
       socketTimeoutMS: 45000, // 45 second socket timeout
       maxPoolSize: 10, // Limit connection pool size
       retryWrites: true,
-      w: "majority",
     };
 
     cached.promise = mongoose

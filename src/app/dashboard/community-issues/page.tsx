@@ -49,7 +49,7 @@ export default function CommunityIssues() {
       } else {
         setError("Failed to fetch community issues");
       }
-    } catch (error) {
+    } catch {
       setError("Network error. Please try again.");
     } finally {
       setLoading(false);

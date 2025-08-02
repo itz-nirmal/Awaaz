@@ -7,11 +7,6 @@ import styles from "./page.module.css";
 export default function Dashboard() {
   const router = useRouter();
   const { user, loading, logout } = useAuth();
-  const [stats, setStats] = useState({
-    reported: 0,
-    inProgress: 0,
-    resolved: 0,
-  });
   const [animatedStats, setAnimatedStats] = useState({
     reported: 0,
     inProgress: 0,
@@ -57,15 +52,13 @@ export default function Dashboard() {
             (t: { status: string }) => t.status === "resolved"
           ).length || 0;
 
-        setStats({ reported, inProgress, resolved });
-
         // Start animations with delays
         setTimeout(() => animateCount(reported, "reported"), 300);
         setTimeout(() => animateCount(inProgress, "inProgress"), 600);
         setTimeout(() => animateCount(resolved, "resolved"), 900);
       }
-    } catch (error) {
-      console.error("Error fetching stats:", error);
+    } catch {
+      console.error("Error fetching stats");
     }
   }, [user?._id, animateCount]);
 
@@ -93,7 +86,7 @@ export default function Dashboard() {
           method: "POST",
           credentials: "include",
         });
-      } catch (error) {
+      } catch {
         console.log("Logout API call failed, but cookie cleared");
       }
 

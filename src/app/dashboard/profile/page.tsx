@@ -66,7 +66,7 @@ export default function Profile() {
         const errorData = await response.json();
         setError(errorData.error || "Failed to update profile");
       }
-    } catch (error) {
+    } catch {
       setError("Network error. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -116,7 +116,7 @@ export default function Profile() {
         const errorData = await response.json();
         setError(errorData.error || "Failed to update password");
       }
-    } catch (error) {
+    } catch {
       setError("Network error. Please try again.");
     } finally {
       setIsSubmitting(false);
