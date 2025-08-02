@@ -8,37 +8,117 @@
   text-align: center;
   position: relative;
   z-index: 2;
+  padding: 2rem 1rem;
 }
 
 .title {
-  font-size: 4rem;
+  font-size: clamp(2.5rem, 8vw, 4rem);
   font-weight: 800;
   letter-spacing: 0.08em;
   color: #fff;
-  text-shadow: 0 4px 32px rgba(60, 0, 120, 0.18), 0 1.5px 8px rgba(0,0,0,0.10);
+  text-shadow: 0 4px 32px rgba(60, 0, 120, 0.18), 0 1.5px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 1.2rem;
   font-family: inherit;
+  line-height: 1.1;
 }
 
 .tagline {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  max-width: 90vw;
+  width: 100%;
 }
 
 .slogan {
-  font-size: 1.4rem;
+  font-size: clamp(1rem, 4vw, 1.4rem);
   font-weight: 600;
   color: #b39ddb;
   letter-spacing: 0.04em;
   margin-bottom: 0.2rem;
+  min-height: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cursor {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
 }
 
 .desc {
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 3vw, 1.1rem);
   font-weight: 400;
   color: #e0d7ff;
   max-width: 480px;
   margin: 0 auto;
-  text-shadow: 0 1.5px 8px rgba(60, 0, 120, 0.10);
+  text-shadow: 0 1.5px 8px rgba(60, 0, 120, 0.1);
+  line-height: 1.5;
+  padding: 0 1rem;
+}
+
+/* Mobile Landscape */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .hero {
+    min-height: 100vh;
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: clamp(2rem, 6vw, 3rem);
+    margin-bottom: 0.8rem;
+  }
+}
+
+/* Tablet */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .hero {
+    padding: 3rem 2rem;
+  }
+
+  .tagline {
+    max-width: 80vw;
+  }
+}
+
+/* Small mobile devices */
+@media screen and (max-width: 480px) {
+  .hero {
+    padding: 1.5rem 0.75rem;
+    min-height: 85vh;
+  }
+
+  .title {
+    margin-bottom: 1rem;
+  }
+
+  .slogan {
+    margin-bottom: 0.5rem;
+  }
+
+  .desc {
+    padding: 0 0.5rem;
+  }
+}
+
+/* Very small devices */
+@media screen and (max-width: 320px) {
+  .hero {
+    padding: 1rem 0.5rem;
+  }
+
+  .title {
+    letter-spacing: 0.06em;
+  }
 }
