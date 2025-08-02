@@ -55,6 +55,7 @@ const DotBackground: React.FC = () => {
     // Animation loop
     let animationId: number;
     function animate() {
+      if (!ctx) return;
       ctx.clearRect(0, 0, width, height);
       // Draw glossy gradient background
       ctx.save();
