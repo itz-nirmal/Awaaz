@@ -48,7 +48,9 @@ const DotBackground: React.FC = () => {
     // Animation loop
     let animationId: number;
     function animate() {
-      const ctx = canvas.getContext('2d');
+      const canvasEl = canvasRef.current;
+      if (!canvasEl) return;
+      const ctx = canvasEl.getContext('2d');
       if (!ctx) return;
       const gradient = ctx.createLinearGradient(0, 0, width, height);
       BG_GRADIENT.forEach(({ stop, color }) => gradient.addColorStop(stop, color));
