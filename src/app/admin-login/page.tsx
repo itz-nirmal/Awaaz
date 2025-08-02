@@ -123,6 +123,7 @@ export default function AdminLogin() {
           <div className={styles.securityNote}>
             <p>Access restricted to pre-registered admin accounts</p>
             <p>Email: admin@awaaz.gov.in</p>
+            <p>Password: 12AwaazAdmin@#</p>
           </div>
         </div>
       </div>
