@@ -1,0 +1,28 @@
+.footer {
+  position: fixed;
+  left: 50%;
+  bottom: 2rem;
+  transform: translateX(-50%);
+  width: 90vw;
+  max-width: 1200px;
+  padding: 0.75rem 2rem;
+  border-radius: 1.5rem;
+  background: rgba(30, 10, 50, 0.18);
+  box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.10);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  z-index: 10;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  color: #e0d7ff;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+  text-shadow: 0 2px 8px rgba(80, 0, 120, 0.10);
+}
