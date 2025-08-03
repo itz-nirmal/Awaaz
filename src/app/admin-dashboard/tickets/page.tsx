@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import styles from "./tickets.module.css";
 
 interface Issue {
@@ -9,10 +10,11 @@ interface Issue {
   description: string;
   category: string;
   status: string;
-  location: string;
+  location: string | { address: string };
   createdAt: string;
   userEmail: string;
   resolution?: string;
+  images?: string[];
 }
 
 export default function TicketManagement() {
@@ -219,6 +221,8 @@ export default function TicketManagement() {
                         value={newStatus}
                         onChange={(e) => setNewStatus(e.target.value)}
                         className={styles.statusSelect}
+                        title="Select new status"
+                        aria-label="Select new status"
                       >
                         <option value="open">Open</option>
                         <option value="in_progress">In Progress</option>
@@ -252,6 +256,28 @@ export default function TicketManagement() {
               <div className={styles.issueDetails}>
                 <p>{issue.description}</p>
 
+                {/* Display Images if available */}
+                {issue.images && issue.images.length > 0 && (
+                  <div className={styles.imagesSection}>
+                    <strong>Attached Images:</strong>
+                    <div className={styles.imageGrid}>
+                      {issue.images.map((imageUrl, index) => (
+                        <div key={index} className={styles.imageWrapper}>
+                          <Image
+                            src={imageUrl}
+                            alt={`Issue image ${index + 1}`}
+                            className={styles.issueImage}
+                            width={200}
+                            height={150}
+                            style={{ objectFit: "cover", cursor: "pointer" }}
+                            onClick={() => window.open(imageUrl, "_blank")}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className={styles.metaInfo}>
                   <span>
                     <strong>Category:</strong> {issue.category}
@@ -259,8 +285,8 @@ export default function TicketManagement() {
                   <span>
                     <strong>Location:</strong>{" "}
                     {typeof issue.location === "object"
-                      ? JSON.stringify(issue.location)
-                      : issue.location}
+                      ? issue.location.address || "Address not provided"
+                      : issue.location || "Address not provided"}
                   </span>
                   <span>
                     <strong>Reported by:</strong> {issue.userEmail}

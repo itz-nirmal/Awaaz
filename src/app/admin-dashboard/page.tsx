@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../contexts/AuthContext";
+import { useToast } from "../../components/Toast";
 import styles from "./page.module.css";
 
 interface AdminUser {
@@ -16,12 +17,13 @@ interface AdminUser {
 export default function AdminDashboard() {
   const router = useRouter();
   const { logout } = useAuth();
+  const { showToast } = useToast();
   const [admin, setAdmin] = useState<AdminUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Handle logout
   const handleLogout = async () => {
-    if (confirm("Are you sure you want to logout?")) {
+    try {
       // Force clear the token cookie
       document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
 
@@ -35,7 +37,11 @@ export default function AdminDashboard() {
       }
 
       await logout();
+      showToast("Successfully logged out!", "success");
       router.push("/admin-login");
+    } catch (error) {
+      console.error("Logout error:", error);
+      showToast("Logout failed. Please try again.", "error");
     }
   };
 

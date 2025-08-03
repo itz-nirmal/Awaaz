@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../contexts/AuthContext";
+import GoogleIcon from "../../components/GoogleIcon";
 import styles from "./page.module.css";
 
 export default function CitizenLogin() {
@@ -237,7 +238,7 @@ export default function CitizenLogin() {
             onClick={handleGoogleAuth}
             className={styles.googleButton}
           >
-            <span className={styles.googleIcon}>G</span>
+            <GoogleIcon className={styles.googleIcon} />
             Continue with Google
           </button>
 

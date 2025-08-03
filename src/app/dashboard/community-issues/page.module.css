@@ -2,6 +2,8 @@
   padding: 2rem;
   min-height: 100vh;
   background: transparent;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .header {
@@ -222,6 +224,21 @@
   white-space: nowrap;
 }
 
+.statusOpen {
+  background: #ff6b6b !important;
+  color: #fff !important;
+}
+
+.statusInprogress {
+  background: #ffd93d !important;
+  color: #000 !important;
+}
+
+.statusResolved {
+  background: #6bcf7f !important;
+  color: #fff !important;
+}
+
 .issueDescription {
   color: rgba(255, 255, 255, 0.8);
   font-size: 0.9rem;
@@ -229,6 +246,7 @@
   margin-bottom: 1.5rem;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

@@ -5,6 +5,7 @@ import DotBackground from "../components/DotBackground";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { AuthProvider } from "../contexts/AuthContext";
+import { ToastProvider } from "../components/Toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,12 +55,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable}`}
         suppressHydrationWarning={true}
       >
-        <AuthProvider>
-          <DotBackground />
-          <Navbar />
-          {children}
-          <Footer />
-        </AuthProvider>
+        <ToastProvider>
+          <AuthProvider>
+            <DotBackground />
+            <Navbar />
+            {children}
+            <Footer />
+          </AuthProvider>
+        </ToastProvider>
       </body>
     </html>
   );

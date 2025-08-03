@@ -2,11 +2,13 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../contexts/AuthContext";
+import { useToast } from "../../components/Toast";
 import styles from "./page.module.css";
 
 export default function Dashboard() {
   const router = useRouter();
   const { user, loading, logout } = useAuth();
+  const { showToast } = useToast();
   const [animatedStats, setAnimatedStats] = useState({
     reported: 0,
     inProgress: 0,
@@ -77,22 +79,25 @@ export default function Dashboard() {
 
   // Handle logout
   const handleLogout = async () => {
-    if (confirm("Are you sure you want to logout?")) {
-      // Force clear the token cookie
-      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+    showToast("Logging out...", "info", 2000);
 
-      try {
-        await fetch("/api/auth/logout", {
-          method: "POST",
-          credentials: "include",
-        });
-      } catch {
-        console.log("Logout API call failed, but cookie cleared");
-      }
+    // Force clear the token cookie
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
 
-      await logout();
-      router.push("/citizen-login");
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch {
+      console.log("Logout API call failed, but cookie cleared");
     }
+
+    await logout();
+    showToast("Successfully logged out!", "success", 3000);
+    setTimeout(() => {
+      router.push("/citizen-login");
+    }, 1000);
   };
 
   if (loading) {

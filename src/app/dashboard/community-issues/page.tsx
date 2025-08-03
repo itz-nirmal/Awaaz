@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../../contexts/AuthContext";
+import { useToast } from "../../../components/Toast";
 import styles from "./page.module.css";
 
 interface Issue {
@@ -10,7 +11,7 @@ interface Issue {
   description: string;
   category: string;
   status: string;
-  location: string;
+  location: string | { address: string };
   createdAt: string;
   updatedAt: string;
   userEmail: string; // Simplified - just store the email directly
@@ -19,6 +20,7 @@ interface Issue {
 export default function CommunityIssues() {
   const router = useRouter();
   const { user } = useAuth();
+  const { showToast } = useToast();
   const [issues, setIssues] = useState<Issue[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -31,40 +33,35 @@ export default function CommunityIssues() {
       return;
     }
 
-    fetchCommunityIssues();
-  }, [user, router]);
+    const fetchCommunityIssues = async () => {
+      try {
+        const response = await fetch("/api/tickets", {
+          credentials: "include",
+        });
 
-  const fetchCommunityIssues = async () => {
-    try {
-      const response = await fetch("/api/tickets", {
-        credentials: "include",
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setIssues(data.tickets || []);
-      } else {
-        setError("Failed to fetch community issues");
+        if (response.ok) {
+          const data = await response.json();
+          setIssues(data.tickets || []);
+          showToast(
+            `Found ${data.tickets?.length || 0} community issues`,
+            "success"
+          );
+        } else {
+          const errorMsg = "Failed to fetch community issues";
+          setError(errorMsg);
+          showToast(errorMsg, "error");
+        }
+      } catch {
+        const errorMsg = "Network error. Please try again.";
+        setError(errorMsg);
+        showToast(errorMsg, "error");
+      } finally {
+        setLoading(false);
       }
-    } catch {
-      setError("Network error. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "open":
-        return "#ff6b6b";
-      case "in_progress":
-        return "#ffd93d";
-      case "resolved":
-        return "#6bcf7f";
-      default:
-        return "#fff";
-    }
-  };
+    fetchCommunityIssues();
+  }, [user, router, showToast]);
 
   const getStatusText = (status: string) => {
     switch (status) {
@@ -129,6 +126,8 @@ export default function CommunityIssues() {
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             className={styles.filterSelect}
+            title="Filter issues by status"
+            aria-label="Filter issues by status"
           >
             <option value="all">All Issues</option>
             <option value="open">Open</option>
@@ -173,8 +172,14 @@ export default function CommunityIssues() {
                     <div className={styles.issueHeader}>
                       <h3 className={styles.issueTitle}>{issue.title}</h3>
                       <span
-                        className={styles.statusBadge}
-                        style={{ background: getStatusColor(issue.status) }}
+                        className={`${styles.statusBadge} ${
+                          styles[
+                            `status${
+                              issue.status.charAt(0).toUpperCase() +
+                              issue.status.slice(1).replace("_", "")
+                            }`
+                          ]
+                        }`}
                       >
                         {getStatusText(issue.status)}
                       </span>
@@ -197,8 +202,8 @@ export default function CommunityIssues() {
                           <span className={styles.detailLabel}>Location:</span>
                           <span className={styles.detailValue}>
                             {typeof issue.location === "object"
-                              ? JSON.stringify(issue.location)
-                              : issue.location}
+                              ? issue.location.address || "Address not provided"
+                              : issue.location || "Address not provided"}
                           </span>
                         </div>
                       )}

@@ -185,16 +185,10 @@
 }
 
 .googleIcon {
-  width: 24px;
-  height: 24px;
-  background: linear-gradient(135deg, #4285f4, #ea4335, #fbbc05, #34a853);
-  border-radius: 50%;
+  margin-right: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  font-size: 14px;
-  color: #fff;
 }
 
 .links {

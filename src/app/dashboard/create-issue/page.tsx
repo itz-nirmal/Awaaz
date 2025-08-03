@@ -2,11 +2,13 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../../contexts/AuthContext";
+import { useToast } from "../../../components/Toast";
 import styles from "./page.module.css";
 
 export default function CreateIssue() {
   const router = useRouter();
   const { user } = useAuth();
+  const { showToast } = useToast();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -20,6 +22,54 @@ export default function CreateIssue() {
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     setFormData((prev) => ({ ...prev, photos: files }));
+  };
+
+  const generateReceipt = (
+    issueData: {
+      title: string;
+      category: string;
+      location?: { address: string };
+      userEmail?: string;
+    },
+    ticketId: string
+  ) => {
+    const receiptData = {
+      ticketId: ticketId,
+      title: issueData.title,
+      category: issueData.category,
+      address: issueData.location?.address || "Not specified",
+      submittedAt: new Date().toLocaleString(),
+      userEmail: user?.email,
+      status: "Submitted",
+    };
+
+    const receiptText = `
+AWAAZ - ISSUE SUBMISSION RECEIPT
+================================
+
+Ticket ID: ${receiptData.ticketId}
+Title: ${receiptData.title}
+Category: ${receiptData.category}
+Location: ${receiptData.address}
+Submitted By: ${receiptData.userEmail}
+Submitted At: ${receiptData.submittedAt}
+Status: ${receiptData.status}
+
+Description:
+${formData.description}
+
+================================
+Thank you for using Awaaz!
+Keep this receipt for tracking your issue.
+    `;
+
+    const element = document.createElement("a");
+    const file = new Blob([receiptText], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = `awaaz-receipt-${ticketId}.txt`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,8 +114,15 @@ export default function CreateIssue() {
       });
 
       if (response.ok) {
-        await response.json();
-        alert("Issue reported successfully!");
+        const result = await response.json();
+        const ticketId = result.ticketId || result._id || `AWAAZ-${Date.now()}`;
+
+        showToast("Issue submitted successfully! 🎉", "success", 4000);
+
+        // Generate and download receipt
+        generateReceipt(submitData, ticketId);
+
+        // Clear form
         setFormData({
           title: "",
           description: "",
@@ -73,7 +130,11 @@ export default function CreateIssue() {
           photos: [],
           address: "",
         });
-        router.push("/dashboard");
+
+        // Redirect after a short delay
+        setTimeout(() => {
+          router.push("/dashboard");
+        }, 2000);
       } else {
         const errorData = await response.json();
         setError(errorData.error || "Failed to submit issue");

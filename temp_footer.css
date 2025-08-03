@@ -1,5 +1,9 @@
 .footer {
-  background: linear-gradient(135deg, rgba(30, 10, 50, 0.95) 0%, rgba(16, 6, 30, 0.98) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(30, 10, 50, 0.95) 0%,
+    rgba(16, 6, 30, 0.98) 100%
+  );
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   margin-top: 5rem;
   -webkit-backdrop-filter: blur(20px) saturate(180%);
